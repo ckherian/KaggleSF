@@ -1,0 +1,89 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Script to get suffixes from street names"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['HY', 'BL', 'WK', 'DR', 'WY', 'RW', 'PALMS', 'BUFANO', 'LN', 'TR', 'STWY', 'RD', 'HWY', 'TER', 'PL', 'PARK', 'AL', 'EX', 'WAY', 'AV', 'CR', 'FERLINGHETTI', 'CT', 'MAR', 'ST', 'PZ']\n"
+     ]
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "import zipfile\n",
+    "import matplotlib.pyplot as plt\n",
+    "import re\n",
+    "\n",
+    "z = zipfile.ZipFile('input/train.csv.zip')\n",
+    "train = pd.read_csv(z.open('train.csv'), parse_dates=['Dates'])\n",
+    "\n",
+    "\n",
+    "#Add year, week and hour data\n",
+    "train['Year'] = train['Dates'].map(lambda x: x.year)\n",
+    "train['Month'] = train['Dates'].map(lambda x: x.month)\n",
+    "train['Hour'] = train['Dates'].map(lambda x: x.hour)\n",
+    "\n",
+    "#remove lines with NAN\n",
+    "train.dropna()\n",
+    "\n",
+    "suffixes = []\n",
+    "suff = []\n",
+    "\n",
+    "for i in train['Address']:\n",
+    "    match = re.search(r'\\s\\w*\\s/|\\s\\w*$', i)\n",
+    "    if match:                      \n",
+    "        suff.append(match.group())\n",
+    "#remove space and /\n",
+    "suff = [w.replace(' ', '') for w in suff]\n",
+    "suff = [w.replace('/', '') for w in suff]\n",
+    "#remove duplicates\n",
+    "suff = list(set(suff))\n",
+    "\n",
+    "#print suffixes and examples of street names \n",
+    "print suff\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "NB : FERLINGHETTI, PALMS, BUFANO and MAR are obviously just names and not suffixes"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 2",
+   "language": "python",
+   "name": "python2"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 2
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython2",
+   "version": "2.7.10"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 0
+}
