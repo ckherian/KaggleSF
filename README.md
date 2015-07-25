@@ -16,3 +16,15 @@ Features_importances_ : X, Y, Day, DayOfYear and Time had the best importances (
 
 2) Same with workhour (time between 8 and 17) : 
 Feature importance of workhour is very low: 0.00589639
+
+3) Only: Day, DayOfYear, Time, X, Y
+
+Random forest with n=10 :
+Cross_validation score : 0.06
+Kaggle score : 32.34575
+
+AdaBoost : 
+Cross_validation score : 0.21
+Kaggle score : 34.47175
+
+
